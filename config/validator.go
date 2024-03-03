@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,8 +16,8 @@ import (
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	en_translations "github.com/go-playground/validator/v10/translations/en"
-	zh_translations "github.com/go-playground/validator/v10/translations/zh"
+	entranslations "github.com/go-playground/validator/v10/translations/en"
+	zhtranslations "github.com/go-playground/validator/v10/translations/zh"
 )
 
 // use a single instance , it caches struct info
@@ -49,11 +50,20 @@ func InitTranslator(language string) error {
 	}
 	switch language {
 	case "en":
-		en_translations.RegisterDefaultTranslations(validate, trans)
+		err := entranslations.RegisterDefaultTranslations(validate, trans)
+		if err != nil {
+			return err
+		}
 	case "zh":
-		zh_translations.RegisterDefaultTranslations(validate, trans)
+		err := zhtranslations.RegisterDefaultTranslations(validate, trans)
+		if err != nil {
+			return err
+		}
 	default:
-		zh_translations.RegisterDefaultTranslations(validate, trans)
+		err := zhtranslations.RegisterDefaultTranslations(validate, trans)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -71,7 +81,8 @@ func ValidateError(c *gin.Context, err error) {
 	// 打印出 body
 	data, _ := io.ReadAll(c.Request.Body)
 	fmt.Printf("req.body=%s\n, content-type=%v\n", data, c.ContentType())
-	errs, ok := err.(validator.ValidationErrors)
+	var errs validator.ValidationErrors
+	ok := errors.As(err, &errs)
 	// 如果不是参数错误，比如是json格式错误
 	if !ok {
 		zap.L().Error(err.Error())
