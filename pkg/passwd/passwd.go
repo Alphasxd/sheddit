@@ -12,7 +12,7 @@ import (
 
 var options = &password.Options{SaltLen: 16, Iterations: 100, KeyLen: 32, HashFunction: sha512.New}
 
-// options := &password.Options{SaltLen: 10, Iterations: 10000, KeyLen: 50, HashFunction: passwd.New}
+// Encode options := &password.Options{SaltLen: 10, Iterations: 10000, KeyLen: 50, HashFunction: passwd.New}
 func Encode(rawPassword string) string {
 	salt, encodedPwd := password.Encode(rawPassword, options)
 	dbPassword := fmt.Sprintf("$sha512$%s$%s", salt, encodedPwd)
