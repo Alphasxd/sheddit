@@ -32,14 +32,6 @@ func FailByCode(ctx *gin.Context, code Code) {
 	})
 }
 
-func SuccessByMsg(ctx *gin.Context, msg string) {
-	response(ctx, http.StatusOK, Response{
-		Code: CodeSuccess,
-		Msg:  msg,
-		Data: nil,
-	})
-}
-
 func Success(ctx *gin.Context, data any) {
 	response(ctx, http.StatusOK, Response{
 		Code: CodeSuccess,
