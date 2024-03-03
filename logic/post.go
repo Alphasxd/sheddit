@@ -57,7 +57,7 @@ func GetTopPostList(page int, pageSize int, order string) []model.Post {
 	ups, downs := GetVotes(ids)
 	// TODO go不能使用for循环的post给结构体赋值 只能通过索引
 	//for i, post := range posts {
-	for i, _ := range posts {
+	for i := range posts {
 		posts[i].Up = ups[i]
 		posts[i].Down = downs[i]
 	}
