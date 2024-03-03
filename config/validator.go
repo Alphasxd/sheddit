@@ -39,22 +39,22 @@ func InitTranslator(language string) error {
 		}
 		return name
 	})
-	zh := zh.New()
-	en := en.New()
+	zhtrans := zh.New()
+	entrans := en.New()
 	// 第一个参数是fallback locale 后面的参数是locales it should support
-	uni = ut.New(en, zh, en)
+	uni = ut.New(entrans, zhtrans, entrans)
 	var ok bool
 	trans, ok = uni.GetTranslator(language)
 	if !ok {
 		return fmt.Errorf("uni.GetTranslator(%s)", language)
 	}
 	switch language {
-	case "en":
+	case "entrans":
 		err := entranslations.RegisterDefaultTranslations(validate, trans)
 		if err != nil {
 			return err
 		}
-	case "zh":
+	case "zhtrans":
 		err := zhtranslations.RegisterDefaultTranslations(validate, trans)
 		if err != nil {
 			return err
