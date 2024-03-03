@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strconv"
 	"time"
+
 	"sheddit/pkg/passwd"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,6 @@ import (
 )
 
 func Register(user dto.RegisterDTO) {
-
 	DB := config.GetDB()
 
 	if isUserExist(user.Username) {
@@ -71,10 +71,7 @@ func isUserExist(username string) bool {
 	DB := config.GetDB()
 	var user model.User
 	result := DB.Where(&model.User{Username: username}).Find(&user)
-	if result.RowsAffected > 0 {
-		return true
-	}
-	return false
+	return result.RowsAffected > 0
 }
 
 func FindUserByUsername(username string) model.User {
