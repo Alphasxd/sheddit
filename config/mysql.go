@@ -82,8 +82,14 @@ func InitDB(conf *MySQLConfig) *gorm.DB {
 	sqlDB.SetMaxOpenConns(100)          // 设置打开数据库连接的最大数量
 	sqlDB.SetConnMaxLifetime(time.Hour) // 设置了连接可复用的最大时间
 	// 数据库迁移
-	db.AutoMigrate(&model.User{})
-	db.AutoMigrate(&model.Category{})
+	err = db.AutoMigrate(&model.User{})
+	if err != nil {
+		return nil
+	}
+	err = db.AutoMigrate(&model.Category{})
+	if err != nil {
+		return nil
+	}
 	db.Create(&model.User{
 		BaseModel: model.BaseModel{ID: 1},
 		UserID:    snowflake.GenerateID(),
@@ -103,7 +109,10 @@ func InitDB(conf *MySQLConfig) *gorm.DB {
 	db.Create(&model.Category{BaseModel: model.BaseModel{ID: 3}, Name: "LeetCode", Description: "算法社区"})
 	db.Create(&model.Category{BaseModel: model.BaseModel{ID: 4}, Name: "Acwing", Description: "算法社区"})
 
-	db.AutoMigrate(&model.Post{})
+	err = db.AutoMigrate(&model.Post{})
+	if err != nil {
+		return nil
+	}
 	zap.L().Info("database init success")
 	DB = db
 	return db
