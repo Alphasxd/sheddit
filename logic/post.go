@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/go-redis/redis/v8"
-	"go.uber.org/zap"
-	"gorm.io/gorm/clause"
 	"sheddit/common"
 	"sheddit/config"
 	"sheddit/dto"
 	"sheddit/model"
+
+	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
+	"gorm.io/gorm/clause"
 )
 
 func GetPostDetail(pid int32) model.Post {
@@ -23,7 +24,7 @@ func GetPostDetail(pid int32) model.Post {
 
 func GetPostList(page int, pageSize int, order string) []model.Post {
 	if order == "score" {
-		return GetTopPostList(page, pageSize, order)
+		return GetTopPostList(page, pageSize)
 	}
 	db := config.GetDB()
 	posts := make([]model.Post, 0)
@@ -45,7 +46,7 @@ func GetPostList(page int, pageSize int, order string) []model.Post {
 	return posts
 }
 
-func GetTopPostList(page int, pageSize int, order string) []model.Post {
+func GetTopPostList(page int, pageSize int) []model.Post {
 	rdb := config.RDB
 	start := (page - 1) * pageSize
 	end := start + pageSize - 1
@@ -64,7 +65,7 @@ func GetTopPostList(page int, pageSize int, order string) []model.Post {
 	return posts
 }
 
-// 统计帖子的点赞数和点踩数
+// GetVotes 统计帖子的点赞数和点踩数
 func GetVotes(ids []string) ([]int, []int) {
 	rdb := config.RDB
 	ctx := context.Background()
@@ -131,8 +132,7 @@ func CreatePost(userId int64, dto dto.PostDTO) {
 }
 
 const (
-	OneWeekTime = 7 * 24 * 3600
-	Score       = 432
+	Score = 432
 )
 
 // PostVoting 一天86400s 定义 200张投票=一天时间的分数
