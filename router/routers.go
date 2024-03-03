@@ -1,12 +1,14 @@
 package router
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
-	"net/http"
-	"time"
+
 	"sheddit/config"
 	"sheddit/docs"
 	"sheddit/middleware"
@@ -29,11 +31,11 @@ func InitRouter() *gin.Engine {
 	})
 
 	r.Use(middleware.RateLimit(time.Second, 1000))
-	//r.Use(middleware.RateLimit2(1))
-	//r.Use(middleware.GlobalErrors())
+	// r.Use(middleware.RateLimit2(1))
+	// r.Use(middleware.GlobalErrors())
 	v1 := r.Group("/api")
 	{
-		GetUserRoutes(v1)      //用户相关路由
+		GetUserRoutes(v1)      // 用户相关路由
 		GetCommunityRoutes(v1) // 社区相关路由
 		GetPostRoutes(v1)      // 帖子相关路由
 	}
