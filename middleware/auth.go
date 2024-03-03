@@ -3,11 +3,13 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+
 	"sheddit/common"
 	"sheddit/config"
 	"sheddit/pkg/jwt"
@@ -26,7 +28,7 @@ func AuthRequired() gin.HandlerFunc {
 			})
 			// 所有中间件都存在一个切片中，中间件的执行是由gin通过index移动来控制的
 			// 所以return并不能终止其他中间件的继续运行
-			//return
+			// return
 			ctx.Abort() // 终止原理很简单 将index往后移动到一个不可能达到的值
 			return
 		}
