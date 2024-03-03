@@ -2,9 +2,9 @@ package jwt
 
 import (
 	"errors"
-	"fmt"
-	"go.uber.org/zap"
 	"time"
+
+	"go.uber.org/zap"
 	"sheddit/config"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -21,6 +21,7 @@ func initSecret() {
 	authConfig := config.Conf.AuthConfig
 	if authConfig == nil {
 		zap.L().Error("auth config is nil")
+		return
 	}
 	secret = authConfig.Secret
 }
@@ -43,7 +44,7 @@ func generateToken(userId int64, expire time.Duration) (string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(mySigningKey)
-	//fmt.Printf("%v %v", tokenString, err)
+	// fmt.Printf("%v %v", tokenString, err)
 	return tokenString, err
 }
 
@@ -62,24 +63,13 @@ func VerifyToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (any, error) {
 		return []byte(secret), nil
 	})
-
 	if err != nil {
 		return nil, errors.New("解析token失败")
 	}
 
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
-		//fmt.Printf("%v %v", claims.UserID, claims.RegisteredClaims.Issuer)
+		// fmt.Printf("%v %v", claims.UserID, claims.RegisteredClaims.Issuer)
 		return claims, nil
 	}
 	return nil, errors.New("token不合法")
-}
-
-func main() {
-	token, err := AccessToken(23)
-	if err != nil {
-
-	}
-	fmt.Println(token)
-	claims, err := VerifyToken(token)
-	fmt.Printf("%v", claims)
 }
