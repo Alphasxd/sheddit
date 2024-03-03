@@ -14,7 +14,7 @@ func TestLimit(t *testing.T) {
 	prev := time.Now()
 	for i := 0; i < 10; i++ {
 		now := limiter.Take()
-		if now.Sub(time.Now()) > 0 {
+		if time.Until(now) > 0 {
 			fmt.Println("ttt")
 		}
 		fmt.Println(i, now.Sub(prev))

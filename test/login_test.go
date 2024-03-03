@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"io"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+
 	"sheddit/config"
 	"sheddit/router"
 )
@@ -30,18 +32,18 @@ func TestLoginApi(t *testing.T) {
 	Init()
 	gin.SetMode(gin.TestMode)
 	r := router.InitRouter()
-	//w := httptest.NewRecorder()
+	// w := httptest.NewRecorder()
 	data := make(map[string]any)
 	data["username"] = "admin"
 	data["password"] = "admin"
-	//jsonData, _ := json.Marshal(data)
+	// jsonData, _ := json.Marshal(data)
 
-	//req, _ := http.NewRequest(http.MethodPost, "/api/user/login", bytes.NewReader(jsonData))
-	//r.ServeHTTP(w, req)
+	// req, _ := http.NewRequest(http.MethodPost, "/api/user/login", bytes.NewReader(jsonData))
+	// r.ServeHTTP(w, req)
 
-	//assert.Equal(t, 200, w.Code)
-	//fmt.Println(w)
-	//assert.Equal(t, "pong", w.Body.String())
+	// assert.Equal(t, 200, w.Code)
+	// fmt.Println(w)
+	// assert.Equal(t, "pong", w.Body.String())
 	body := PostJson("/api/user/login", data, r, t)
 	fmt.Println(body)
 }
@@ -68,6 +70,6 @@ func PostJson(uri string, param map[string]any, router *gin.Engine, t *testing.T
 	defer result.Body.Close()
 
 	// 读取响应body
-	body, _ := ioutil.ReadAll(result.Body)
+	body, _ := io.ReadAll(result.Body)
 	return body
 }
