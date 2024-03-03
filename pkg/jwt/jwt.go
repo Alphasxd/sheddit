@@ -59,7 +59,7 @@ func VerifyToken(tokenString string) (*CustomClaims, error) {
 	if secret == "" {
 		initSecret()
 	}
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (any, error) {
 		return []byte(secret), nil
 	})
 
