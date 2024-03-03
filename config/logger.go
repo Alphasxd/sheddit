@@ -11,7 +11,7 @@ import (
 func InitLogger(logConfig *LogConfig) {
 	writeSyncer := getLogWriter(logConfig.Filename, logConfig.MaxSize, logConfig.MaxBackups, logConfig.MaxAge)
 	encoder := getProdEncoder()
-	var l = new(zapcore.Level)
+	l := new(zapcore.Level)
 	err := l.UnmarshalText([]byte(logConfig.Level))
 	if err != nil {
 		panic(err)
@@ -36,13 +36,13 @@ func InitLogger(logConfig *LogConfig) {
 
 func getProdEncoder() zapcore.Encoder {
 	encoderConfig := zap.NewProductionEncoderConfig()
-	//encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	// encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000")
 	encoderConfig.TimeKey = "time"
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
 	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-	//return zapcore.NewJSONEncoder(encoderConfig)
+	// return zapcore.NewJSONEncoder(encoderConfig)
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
