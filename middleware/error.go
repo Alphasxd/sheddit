@@ -24,7 +24,7 @@ func GlobalErrors() gin.HandlerFunc {
 }
 
 // recover错误，转string
-func errorToString(r interface{}) string {
+func errorToString(r any) string {
 	switch v := r.(type) {
 	case error:
 		return v.Error()
