@@ -117,7 +117,8 @@ func CustomRecoveryWithZap(logger *zap.Logger, stack bool, recovery gin.Recovery
 				// Check for a broken connection, as it is not really a
 				// condition that warrants a panic stack trace.
 				var brokenPipe bool
-				if ne, ok := err.(*net.OpError); ok {
+				var ne *net.OpError
+				if errors.As(err.(error), &ne) {
 					var se *os.SyscallError
 					if errors.As(ne.Err, &se) {
 						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
