@@ -13,7 +13,7 @@ type BaseModel struct {
 	DeleteTime gorm.DeletedAt `gorm:"column:delete_time" json:"-"`
 }
 
-func (b *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
+func (b *BaseModel) BeforeCreate(*gorm.DB) (err error) {
 	b.CreateTime = time.Now()
 	b.UpdateTime = b.CreateTime
 	return
