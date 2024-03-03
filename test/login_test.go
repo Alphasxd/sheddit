@@ -31,7 +31,7 @@ func TestLoginApi(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := router.InitRouter()
 	//w := httptest.NewRecorder()
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 	data["username"] = "admin"
 	data["password"] = "admin"
 	//jsonData, _ := json.Marshal(data)
@@ -47,7 +47,7 @@ func TestLoginApi(t *testing.T) {
 }
 
 // PostJson 根据特定请求uri和参数param，以Json形式传递参数，发起post请求返回响应
-func PostJson(uri string, param map[string]interface{}, router *gin.Engine, t *testing.T) []byte {
+func PostJson(uri string, param map[string]any, router *gin.Engine, t *testing.T) []byte {
 	// 将参数转化为json比特流
 	jsonByte, err := json.Marshal(param)
 	if err != nil {
