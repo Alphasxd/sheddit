@@ -7,9 +7,9 @@ import (
 )
 
 type Response struct {
-	Code int         `json:"code"`
-	Msg  interface{} `json:"msg,omitempty"`
-	Data interface{} `json:"data,omitempty"`
+	Code int `json:"code"`
+	Msg  any `json:"msg,omitempty"`
+	Data any `json:"data,omitempty"`
 }
 
 func response(ctx *gin.Context, httpStatus int, resp Response) {
@@ -40,7 +40,7 @@ func SuccessByMsg(ctx *gin.Context, msg string) {
 	})
 }
 
-func Success(ctx *gin.Context, data interface{}) {
+func Success(ctx *gin.Context, data any) {
 	response(ctx, http.StatusOK, Response{
 		Code: CodeSuccess,
 		Msg:  ToMsg(CodeSuccess),
