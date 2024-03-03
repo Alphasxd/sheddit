@@ -3,10 +3,11 @@ package logic
 import (
 	"context"
 	"fmt"
+	"strconv"
+
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 	"gorm.io/gorm/clause"
-	"strconv"
 	"sheddit/common"
 	"sheddit/config"
 	"sheddit/dto"
@@ -56,7 +57,6 @@ func GetTopPostList(page int, pageSize int, order string) []model.Post {
 	posts := getPostListIn(ids)
 	ups, downs := GetVotes(ids)
 	// TODO go不能使用for循环的post给结构体赋值 只能通过索引
-	//for i, post := range posts {
 	for i := range posts {
 		posts[i].Up = ups[i]
 		posts[i].Down = downs[i]
@@ -92,8 +92,11 @@ func getPostListIn(ids []string) []model.Post {
 	posts := make([]model.Post, 0)
 	// IN查询要指定ids顺序
 	db.Where("id IN ?", ids).Clauses(clause.OrderBy{
-		Expression: clause.Expr{SQL: "FIELD(id,?)",
-			Vars: []interface{}{ids}, WithoutParentheses: true}}).Find(&posts)
+		Expression: clause.Expr{
+			SQL:  "FIELD(id,?)",
+			Vars: []interface{}{ids}, WithoutParentheses: true,
+		},
+	}).Find(&posts)
 	return posts
 }
 
