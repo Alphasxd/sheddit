@@ -11,7 +11,7 @@ import (
 
 // @title Swagger Example API
 // @version 1.0
-// @description This is a sample server Petstore server.
+// @description This is a sample server.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
@@ -40,5 +40,8 @@ func main() {
 	config.InitRedis(config.Conf.RedisConfig)
 	// 初始化路由
 	r := router.InitRouter()
-	r.Run(fmt.Sprintf(":%d", config.Conf.Port))
+	err := r.Run(fmt.Sprintf(":%d", config.Conf.Port))
+	if err != nil {
+		return
+	}
 }
