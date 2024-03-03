@@ -94,7 +94,7 @@ func getPostListIn(ids []string) []model.Post {
 	db.Where("id IN ?", ids).Clauses(clause.OrderBy{
 		Expression: clause.Expr{
 			SQL:  "FIELD(id,?)",
-			Vars: []interface{}{ids}, WithoutParentheses: true,
+			Vars: []any{ids}, WithoutParentheses: true,
 		},
 	}).Find(&posts)
 	return posts
