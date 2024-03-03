@@ -2,8 +2,9 @@ package api
 
 import (
 	"fmt"
-	"go.uber.org/zap"
 	"strconv"
+
+	"go.uber.org/zap"
 	"sheddit/vo"
 
 	"github.com/gin-gonic/gin"
@@ -28,11 +29,11 @@ import (
 // @Failure 500 {object} common.Response
 // @Router /post [get]
 func GetPostList(ctx *gin.Context) {
-	//query1 := ctx.DefaultQuery("page", "1")
-	//query2 := ctx.DefaultQuery("page_size", "10")
-	//order := ctx.DefaultQuery("order", "create_time")
-	//page, _ := strconv.Atoi(query1)
-	//pageSize, _ := strconv.Atoi(query2)
+	// query1 := ctx.DefaultQuery("page", "1")
+	// query2 := ctx.DefaultQuery("page_size", "10")
+	// order := ctx.DefaultQuery("order", "create_time")
+	// page, _ := strconv.Atoi(query1)
+	// pageSize, _ := strconv.Atoi(query2)
 	query := dto.PostListQuery{Page: 1, PageSize: 10, Order: "create_time"}
 	if err := ctx.ShouldBind(&query); err != nil {
 		config.ValidateError(ctx, err)
@@ -62,15 +63,19 @@ func GetPostDetail(ctx *gin.Context) {
 	}
 	pid, err := strconv.ParseInt(pidStr, 10, 32)
 	if err != nil {
-
+		zap.L().Error("post_id")
+		common.FailByMsg(ctx, "post_id不合法")
+		return
 	}
 	detail := logic.GetPostDetail(int32(pid))
 	category := logic.GetCategoryById(detail.CategoryID)
 	author := logic.GetUserById(detail.AuthorID)
 	common.Success(ctx,
-		vo.PostDetail{AuthorName: author.Username,
+		vo.PostDetail{
+			AuthorName:   author.Username,
 			CategoryName: category.Name,
-			Post:         detail})
+			Post:         detail,
+		})
 }
 
 func CreatePost(ctx *gin.Context) {
