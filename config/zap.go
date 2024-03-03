@@ -1,8 +1,7 @@
-// Package ginzap provides log handling using zap package.
-// Code structure based on ginrus package.
 package config
 
 import (
+	"errors"
 	"net"
 	"net/http/httputil"
 	"os"
@@ -65,7 +64,7 @@ func GinzapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 				// zap.String("user-agent", c.Request.UserAgent()),
 				zap.Duration("latency", latency),
 			}
-			
+
 			if conf.Context != nil {
 				fields = append(fields, conf.Context(c)...)
 			}
@@ -81,7 +80,6 @@ func GinzapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 		}
 	}
 }
-
 
 func customHandleRecovery(c *gin.Context, err any) {
 	switch v := err.(type) {
@@ -120,7 +118,8 @@ func CustomRecoveryWithZap(logger *zap.Logger, stack bool, recovery gin.Recovery
 				// condition that warrants a panic stack trace.
 				var brokenPipe bool
 				if ne, ok := err.(*net.OpError); ok {
-					if se, ok := ne.Err.(*os.SyscallError); ok {
+					var se *os.SyscallError
+					if errors.As(ne.Err, &se) {
 						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
 							brokenPipe = true
 						}
