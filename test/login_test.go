@@ -67,7 +67,12 @@ func PostJson(uri string, param map[string]any, router *gin.Engine, t *testing.T
 	fmt.Println(w)
 	// 提取响应
 	result := w.Result()
-	defer result.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(result.Body)
 
 	// 读取响应body
 	body, _ := io.ReadAll(result.Body)
