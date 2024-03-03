@@ -4,12 +4,12 @@ package config
 
 import (
 	"net"
-	"net/http"
 	"net/http/httputil"
 	"os"
 	"runtime/debug"
 	"strings"
 	"time"
+
 	"sheddit/common"
 
 	"github.com/gin-gonic/gin"
@@ -56,23 +56,16 @@ func GinzapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 		if _, ok := skipPaths[path]; !ok {
 			end := time.Now()
 			latency := end.Sub(start)
-			if conf.UTC {
-				end = end.UTC()
-			}
-
 			fields := []zapcore.Field{
 				zap.Int("status", c.Writer.Status()),
 				zap.String("method", c.Request.Method),
-				//zap.String("path", path),
+				// zap.String("path", path),
 				zap.String("query", query),
 				zap.String("ip", c.ClientIP()),
-				//zap.String("user-agent", c.Request.UserAgent()),
+				// zap.String("user-agent", c.Request.UserAgent()),
 				zap.Duration("latency", latency),
 			}
-			if conf.TimeFormat != "" {
-				//fields = append(fields, zap.String("time", end.Format(conf.TimeFormat)))
-			}
-
+			
 			if conf.Context != nil {
 				fields = append(fields, conf.Context(c)...)
 			}
@@ -89,11 +82,8 @@ func GinzapWithConfig(logger *zap.Logger, conf *Config) gin.HandlerFunc {
 	}
 }
 
-func defaultHandleRecovery(c *gin.Context, err interface{}) {
-	c.AbortWithStatus(http.StatusInternalServerError)
-}
 
-func customHandleRecovery(c *gin.Context, err interface{}) {
+func customHandleRecovery(c *gin.Context, err any) {
 	switch v := err.(type) {
 	case common.CustomError:
 		common.FailByCode(c, v.ErrorCode)
@@ -155,7 +145,7 @@ func CustomRecoveryWithZap(logger *zap.Logger, stack bool, recovery gin.Recovery
 					zap.String("method", c.Request.Method),
 					zap.String("ip", c.ClientIP()),
 					zap.String("user-agent", c.Request.UserAgent()),
-					//zap.String("request", string(httpRequest)),
+					// zap.String("request", string(httpRequest)),
 				}
 
 				if stack {
