@@ -39,7 +39,7 @@ func generateToken(userId int64, expire time.Duration) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)), // 过期时间
 			IssuedAt:  jwt.NewNumericDate(time.Now()),             // 签发时间
 			NotBefore: jwt.NewNumericDate(time.Now()),             // 生效时间
-			Issuer:    "novo",
+			Issuer:    "Sheldon",
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
