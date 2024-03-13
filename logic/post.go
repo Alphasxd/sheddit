@@ -125,10 +125,10 @@ func CreatePost(userId int64, dto dto.PostDTO) {
 		Member: post.ID,
 	})
 	if cmds, err := pipeline.Exec(ctx); err != nil {
-		zap.L().Error("CreatePost redis操作异常 "+err.Error(), zap.Any("cmds", cmds))
+		zap.L().Error("CreatePost redis operational anomaly "+err.Error(), zap.Any("cmds", cmds))
 		return
 	}
-	zap.L().Info("redis记录发帖时间 " + fmt.Sprintf("%d", post.CreateTime.Unix()))
+	zap.L().Info("Redis record the time of posting " + fmt.Sprintf("%d", post.CreateTime.Unix()))
 }
 
 const (
@@ -164,6 +164,6 @@ func PostVoting(userId int64, vote dto.VoteDTO) {
 		pipeline.HSet(ctx, common.KeyPostVotedPrefix+postIdStr, userIdStr, strconv.Itoa(vote.Type))
 	}
 	if cmds, err := pipeline.Exec(ctx); err != nil {
-		zap.L().Error("PostVoting redis操作异常 "+err.Error(), zap.Any("cmds", cmds))
+		zap.L().Error("PostVoting redis operational anomaly"+err.Error(), zap.Any("cmds", cmds))
 	}
 }
