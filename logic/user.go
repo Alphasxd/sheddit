@@ -36,7 +36,7 @@ func Register(user dto.RegisterDTO) {
 
 	result := DB.Create(&newUser)
 	if result.RowsAffected == 0 {
-		panic(errors.New("创建失败"))
+		panic(errors.New("Create user failed"))
 	}
 }
 
