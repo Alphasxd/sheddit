@@ -12,10 +12,10 @@ const (
 
 var MsgMap = map[Code]string{
 	CodeSuccess:         "success",
-	CodeServerError:     "服务器异常",
-	CodeInvalidPassword: "用户名或密码错误",
-	CodeUserExist:       "用户已存在",
-	CodeVoteTimeExpired: "投票时间已过期",
+	CodeServerError:     "server error",
+	CodeInvalidPassword: "invalid username or password",
+	CodeUserExist:       "user already exist",
+	CodeVoteTimeExpired: "vote time expired",
 }
 
 func ToMsg(code Code) string {
