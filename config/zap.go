@@ -90,7 +90,7 @@ func customHandleRecovery(c *gin.Context, err any) {
 	case string:
 		common.FailByMsg(c, v)
 	default:
-		common.FailByMsg(c, "未知错误")
+		common.FailByMsg(c, "unknown error")
 	}
 	c.Abort()
 }
