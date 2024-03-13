@@ -24,7 +24,7 @@ func Encode(rawPassword string) string {
 func Verify(rawPassword string, dbPassword string) bool {
 	splits := strings.Split(dbPassword, "$")
 	if len(splits) != 4 {
-		zap.L().Error("数据库密码格式错误")
+		zap.L().Error("Invalid password format")
 		return false
 	}
 	// [ sha512 WI56n0Wmte5Ul0ui f89fdc8f8c7dc87c220d2331007b48d53e5eb2a9f64d2a31f0cedb4dd3f7c874]
