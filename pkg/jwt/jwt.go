@@ -64,12 +64,12 @@ func VerifyToken(tokenString string) (*CustomClaims, error) {
 		return []byte(secret), nil
 	})
 	if err != nil {
-		return nil, errors.New("解析token失败")
+		return nil, errors.New("failed to parse token")
 	}
 
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		// fmt.Printf("%v %v", claims.UserID, claims.RegisteredClaims.Issuer)
 		return claims, nil
 	}
-	return nil, errors.New("token不合法")
+	return nil, errors.New("invalid token")
 }
