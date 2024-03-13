@@ -24,7 +24,7 @@ func AuthRequired() gin.HandlerFunc {
 
 		if token == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"msg": "用户未登录",
+				"msg": "user not login",
 			})
 			// 所有中间件都存在一个切片中，中间件的执行是由gin通过index移动来控制的
 			// 所以return并不能终止其他中间件的继续运行
@@ -35,7 +35,7 @@ func AuthRequired() gin.HandlerFunc {
 		parts := strings.SplitN(token, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			ctx.JSON(http.StatusBadRequest, gin.H{
-				"msg": "token格式不正确",
+				"msg": "token format error",
 			})
 			ctx.Abort()
 			return
@@ -44,7 +44,7 @@ func AuthRequired() gin.HandlerFunc {
 		if err != nil {
 			zap.L().Error(err.Error())
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"msg": "登录过期",
+				"msg": "login expired",
 			})
 			ctx.Abort()
 			return
@@ -55,10 +55,10 @@ func AuthRequired() gin.HandlerFunc {
 			if err != nil {
 				zap.L().Error(err.Error())
 			} else {
-				zap.L().Info(fmt.Sprintf("用户:[%d] IP:[%s] 同一时间登录多次", claims.UserID, ctx.RemoteIP()))
+				zap.L().Info(fmt.Sprintf("User:[%d] IP:[%s] logging in multiple times at the same time", claims.UserID, ctx.RemoteIP()))
 			}
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"msg": "登录过期",
+				"msg": "login expired",
 			})
 			ctx.Abort()
 			return
