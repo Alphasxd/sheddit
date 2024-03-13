@@ -58,13 +58,13 @@ func GetPostDetail(ctx *gin.Context) {
 	pidStr := ctx.Param("post_id")
 	if pidStr == "" {
 		zap.L().Error("post_id")
-		common.FailByMsg(ctx, "post_id为空")
+		common.FailByMsg(ctx, "post_id is required")
 		return
 	}
 	pid, err := strconv.ParseInt(pidStr, 10, 32)
 	if err != nil {
 		zap.L().Error("post_id")
-		common.FailByMsg(ctx, "post_id不合法")
+		common.FailByMsg(ctx, "post_id is invalid")
 		return
 	}
 	detail := logic.GetPostDetail(int32(pid))
@@ -86,7 +86,7 @@ func CreatePost(ctx *gin.Context) {
 	}
 	userId, exists := ctx.Get("userId")
 	if !exists {
-		fmt.Println("未登录")
+		fmt.Println("not login")
 	}
 	logic.CreatePost(userId.(int64), postDTO)
 	common.Success(ctx, nil)
