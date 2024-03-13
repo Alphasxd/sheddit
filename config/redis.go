@@ -19,7 +19,7 @@ func InitRedis(cfg *RedisConfig) {
 	database := cfg.Database
 	RDB = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", host, port),
-		Password: password, // no password set
+		Password: password, // password set
 		DB:       database, // use default DB
 	})
 
