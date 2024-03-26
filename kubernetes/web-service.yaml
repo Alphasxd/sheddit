@@ -8,6 +8,7 @@ metadata:
     io.kompose.service: web
   name: web
 spec:
+  type: NodePort
   ports:
     - name: "8088"
       port: 8088
